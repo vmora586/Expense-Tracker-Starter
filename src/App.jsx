@@ -43,6 +43,10 @@ function App() {
     filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
   }
 
+  const handleDelete = (id) => {
+    setTransactions(transactions.filter(t => t.id !== id));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description || !amount) return;
@@ -83,6 +87,7 @@ function App() {
         filterType={filterType} filterCategory={filterCategory}
         categories={categories}
         setFilterType={setFilterType} setFilterCategory={setFilterCategory}
+        onDelete={handleDelete}
       />
     </div>
   );
