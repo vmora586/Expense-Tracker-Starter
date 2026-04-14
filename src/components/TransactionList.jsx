@@ -26,7 +26,7 @@ function TransactionList({
             <th>Description</th>
             <th>Category</th>
             <th>Amount</th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
