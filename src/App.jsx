@@ -3,6 +3,7 @@ import './App.css'
 import SummaryCards from './components/SummaryCards'
 import AddTransactionForm from './components/AddTransactionForm'
 import TransactionList from './components/TransactionList'
+import ExpensesByCategoryChart from './components/ExpensesByCategoryChart'
 
 function App() {
   const [transactions, setTransactions] = useState([
@@ -81,6 +82,8 @@ function App() {
         setDescription={setDescription} setAmount={setAmount} setType={setType}
         setCategory={setCategory} handleSubmit={handleSubmit}
       />
+
+      <ExpensesByCategoryChart transactions={transactions} />
 
       <TransactionList
         filteredTransactions={filteredTransactions}
