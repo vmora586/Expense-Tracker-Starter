@@ -33,7 +33,7 @@ function ExpensesByCategoryChart({ transactions }) {
           <XAxis dataKey="category" />
           <YAxis tickFormatter={(value) => `$${value}`} />
           <Tooltip formatter={(value) => [`$${value.toFixed(2)}`, 'Amount']} />
-          <Bar dataKey="amount" fill="#e74c3c" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="amount" fill="#F04438" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
