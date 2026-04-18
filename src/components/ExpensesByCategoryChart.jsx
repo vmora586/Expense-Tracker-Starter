@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -11,17 +10,14 @@ import {
 import { CATEGORIES } from '../constants';
 
 function ExpensesByCategoryChart({ transactions }) {
-  const data = useMemo(() =>
-    CATEGORIES
-      .map((category) => ({
-        category,
-        amount: transactions
-          .filter((t) => t.type === 'expense' && t.category === category)
-          .reduce((sum, t) => sum + t.amount, 0),
-      }))
-      .filter((item) => item.amount > 0),
-    [transactions]
-  );
+  const data = CATEGORIES
+    .map((category) => ({
+      category,
+      amount: transactions
+        .filter((t) => t.type === 'expense' && t.category === category)
+        .reduce((sum, t) => sum + t.amount, 0),
+    }))
+    .filter((item) => item.amount > 0);
 
   if (data.length === 0) {
     return null;

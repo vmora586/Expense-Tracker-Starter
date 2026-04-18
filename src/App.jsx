@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import './App.css'
 import SummaryCards from './components/SummaryCards'
 import AddTransactionForm from './components/AddTransactionForm'
@@ -20,24 +20,19 @@ function App() {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
-  const totalIncome = useMemo(
-    () => transactions.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0),
-    [transactions]
-  );
+  const totalIncome = transactions
+    .filter(t => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalExpenses = useMemo(
-    () => transactions.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0),
-    [transactions]
-  );
+  const totalExpenses = transactions
+    .filter(t => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
 
-  const balance = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses]);
+  const balance = totalIncome - totalExpenses;
 
-  const filteredTransactions = useMemo(() =>
-    transactions
-      .filter(t => filterType === "all" || t.type === filterType)
-      .filter(t => filterCategory === "all" || t.category === filterCategory),
-    [transactions, filterType, filterCategory]
-  );
+  const filteredTransactions = transactions
+    .filter(t => filterType === "all" || t.type === filterType)
+    .filter(t => filterCategory === "all" || t.category === filterCategory);
 
   const handleDelete = (id) => {
     setTransactions(prev => prev.filter(t => t.id !== id));
