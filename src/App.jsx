@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import './App.css'
 import SummaryCards from './components/SummaryCards'
 import AddTransactionForm from './components/AddTransactionForm'
@@ -10,64 +10,49 @@ function App() {
     { id: 1, description: "Salary", amount: 5000, type: "income", category: "salary", date: "2025-01-01" },
     { id: 2, description: "Rent", amount: 1200, type: "expense", category: "housing", date: "2025-01-02" },
     { id: 3, description: "Groceries", amount: 150, type: "expense", category: "food", date: "2025-01-03" },
-    { id: 4, description: "Freelance Work", amount: 800, type: "expense", category: "salary", date: "2025-01-05" },
+    { id: 4, description: "Freelance Work", amount: 800, type: "income", category: "salary", date: "2025-01-05" },
     { id: 5, description: "Electric Bill", amount: 95, type: "expense", category: "utilities", date: "2025-01-06" },
     { id: 6, description: "Dinner Out", amount: 65, type: "expense", category: "food", date: "2025-01-07" },
     { id: 7, description: "Gas", amount: 45, type: "expense", category: "transport", date: "2025-01-08" },
     { id: 8, description: "Netflix", amount: 15, type: "expense", category: "entertainment", date: "2025-01-10" },
   ]);
 
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("expense");
-  const [category, setCategory] = useState("food");
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
-  const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
+  const totalIncome = useMemo(
+    () => transactions.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0),
+    [transactions]
+  );
 
-  const totalIncome = transactions
-    .filter(t => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
+  const totalExpenses = useMemo(
+    () => transactions.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0),
+    [transactions]
+  );
 
-  const totalExpenses = transactions
-    .filter(t => t.type === "expense")
-    .reduce((sum, t) => sum + t.amount, 0);
+  const balance = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses]);
 
-  const balance = totalIncome - totalExpenses;
-
-  let filteredTransactions = transactions;
-  if (filterType !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
-  }
-  if (filterCategory !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
-  }
+  const filteredTransactions = useMemo(() =>
+    transactions
+      .filter(t => filterType === "all" || t.type === filterType)
+      .filter(t => filterCategory === "all" || t.category === filterCategory),
+    [transactions, filterType, filterCategory]
+  );
 
   const handleDelete = (id) => {
-    setTransactions(transactions.filter(t => t.id !== id));
+    setTransactions(prev => prev.filter(t => t.id !== id));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!description || !amount) return;
-
-    const newTransaction = {
+  const handleAdd = ({ description, amount, type, category }) => {
+    setTransactions(prev => [...prev, {
       id: Date.now(),
       description,
-      amount: parseFloat(amount),
+      amount,
       type,
       category,
       date: new Date().toISOString().split('T')[0],
-    };
-
-    setTransactions([...transactions, newTransaction]);
-    setDescription("");
-    setAmount("");
-    setType("expense");
-    setCategory("food");
+    }]);
   };
-
 
   return (
     <div className="app">
@@ -76,19 +61,13 @@ function App() {
 
       <SummaryCards totalIncome={totalIncome} totalExpenses={totalExpenses} balance={balance} />
 
-      <AddTransactionForm
-        description={description} amount={amount} type={type} category={category}
-        categories={categories}
-        setDescription={setDescription} setAmount={setAmount} setType={setType}
-        setCategory={setCategory} handleSubmit={handleSubmit}
-      />
+      <AddTransactionForm onAdd={handleAdd} />
 
       <ExpensesByCategoryChart transactions={transactions} />
 
       <TransactionList
         filteredTransactions={filteredTransactions}
         filterType={filterType} filterCategory={filterCategory}
-        categories={categories}
         setFilterType={setFilterType} setFilterCategory={setFilterCategory}
         onDelete={handleDelete}
       />

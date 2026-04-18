@@ -129,15 +129,15 @@
   margin-bottom: 14px;
 }
 
-form {
+.add-transaction form {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-form input,
-form select {
+.add-transaction form input,
+.add-transaction form select {
   padding: 9px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -150,21 +150,21 @@ form select {
   height: 38px;
 }
 
-form input:focus,
-form select:focus {
+.add-transaction form input:focus,
+.add-transaction form select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.06);
 }
 
-form input::placeholder {
+.add-transaction form input::placeholder {
   color: var(--text-tertiary);
 }
 
-form input[type="text"]   { flex: 2; min-width: 160px; }
-form input[type="number"] { flex: 1; min-width: 100px; }
-form select               { flex: 1; min-width: 120px; }
+.add-transaction form input[type="text"]   { flex: 2; min-width: 160px; }
+.add-transaction form input[type="number"] { flex: 1; min-width: 100px; }
+.add-transaction form select               { flex: 1; min-width: 120px; }
 
-form button {
+.add-transaction form button {
   padding: 9px 20px;
   height: 38px;
   background: var(--accent);
@@ -179,8 +179,24 @@ form button {
   transition: background 0.15s, transform 0.1s;
 }
 
-form button:hover  { background: var(--accent-hover); }
-form button:active { transform: scale(0.97); }
+.add-transaction form button:hover  { background: var(--accent-hover); }
+.add-transaction form button:active { transform: scale(0.97); }
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.input-error {
+  border-color: var(--expense) !important;
+}
+
+.error-msg {
+  font-size: 12px;
+  color: var(--expense);
+}
 
 /* ── Chart ──────────────────────────────────────────────── */
 .chart-container {
@@ -327,8 +343,8 @@ td.expense-amount {
 
   .transactions-header { flex-direction: column; align-items: flex-start; gap: 10px; }
 
-  form { flex-direction: column; }
-  form input,
-  form select,
-  form button { width: 100%; flex: unset; }
+  .add-transaction form { flex-direction: column; }
+  .add-transaction form input,
+  .add-transaction form select,
+  .add-transaction form button { width: 100%; flex: unset; }
 }

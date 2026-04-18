@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -7,18 +8,20 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { CATEGORIES } from '../constants';
 
 function ExpensesByCategoryChart({ transactions }) {
-  const categories = ['food', 'housing', 'utilities', 'transport', 'entertainment', 'salary', 'other'];
-
-  const data = categories
-    .map((category) => ({
-      category,
-      amount: transactions
-        .filter((t) => t.type === 'expense' && t.category === category)
-        .reduce((sum, t) => sum + t.amount, 0),
-    }))
-    .filter((item) => item.amount > 0);
+  const data = useMemo(() =>
+    CATEGORIES
+      .map((category) => ({
+        category,
+        amount: transactions
+          .filter((t) => t.type === 'expense' && t.category === category)
+          .reduce((sum, t) => sum + t.amount, 0),
+      }))
+      .filter((item) => item.amount > 0),
+    [transactions]
+  );
 
   if (data.length === 0) {
     return null;
